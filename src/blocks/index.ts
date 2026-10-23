@@ -125,6 +125,17 @@ export const LogoWallBlock: Block = {
   slug: 'logoWall',
   labels: { singular: 'แบรนด์และพันธมิตร', plural: 'แบรนด์และพันธมิตร' },
   fields: [
+    {
+      name: 'style',
+      label: 'รูปแบบ',
+      type: 'select',
+      defaultValue: 'cards',
+      options: [
+        { label: 'การ์ดแบรนด์', value: 'cards' },
+        { label: 'แถบโลโก้', value: 'logos' },
+      ],
+    },
+    { name: 'eyebrow', label: 'หัวข้อเล็ก (อังกฤษ)', type: 'text' },
     { name: 'heading', label: 'หัวข้อ', type: 'text', localized: true },
     { name: 'brands', label: 'เลือกแบรนด์ (เว้นว่าง = ทั้งหมด)', type: 'relationship', relationTo: 'brands', hasMany: true },
   ],

@@ -47,15 +47,39 @@ for (const [order, c] of categoryData.entries()) {
   await payload.update({ collection: 'categories', id: doc.id, locale: 'en', data: { subtitle: c.en } })
 }
 
+const categoryIds = Object.fromEntries(
+  (await payload.find({ collection: 'categories', limit: 50, depth: 0 })).docs.map((c) => [c.slug, c.id]),
+)
+const cats = (...slugs: string[]) => slugs.map((s) => categoryIds[s]).filter(Boolean)
+
 const brandData = [
-  { name: 'RUBYCON', kind: 'authorized', since: 2018 },
-  { name: 'element14', kind: 'authorized', since: 2020 },
-  { name: 'FET Solution Engineering', kind: 'partner' },
-  { name: 'Alliance Packing Group', kind: 'partner' },
-  { name: 'AlphaSource', kind: 'group', since: 2014 },
+  {
+    name: 'RUBYCON', slug: 'rubycon', kind: 'authorized', since: 2018, categories: cats('capacitors'),
+    th: { origin: 'ญี่ปุ่น', tagline: 'ตัวเก็บประจุคุณภาพสูงจากญี่ปุ่น', description: 'ผู้ผลิตตัวเก็บประจุอะลูมิเนียมอิเล็กโทรไลต์และฟิล์มจากญี่ปุ่น เราเป็นตัวแทนจำหน่ายอย่างเป็นทางการในประเทศไทยตั้งแต่ปี 2018' },
+    en: { origin: 'Japan', tagline: 'High-reliability capacitors from Japan', description: 'Japanese maker of aluminum electrolytic and film capacitors. Our authorized distribution in Thailand began in 2018.' },
+  },
+  {
+    name: 'element14', slug: 'element14', kind: 'authorized', since: 2020, categories: cats('ics', 'resistors', 'electromechanical'),
+    th: { tagline: 'ชิ้นส่วนอิเล็กทรอนิกส์หลากหลายในที่เดียว', description: 'ผู้จัดจำหน่ายชิ้นส่วนอิเล็กทรอนิกส์ระดับโลก ครอบคลุมเซมิคอนดักเตอร์ พาสซีฟ และอิเล็กโทรแมคคานิคอล เป็นตัวแทนอย่างเป็นทางการตั้งแต่ปี 2020' },
+    en: { tagline: 'Broadline electronic components', description: 'Global electronic component distributor covering semiconductors, passives and electromechanical parts. Authorized partner since 2020.' },
+  },
+  {
+    name: 'AlphaSource', slug: 'alphasource', kind: 'group', since: 2014, categories: cats('harness', 'ties'),
+    th: { tagline: 'บริษัทในเครือ ดูแลลูกค้าในประเทศ', description: 'AlphaSource Corporation ก่อตั้งปี 2014 เป็นจุดเริ่มต้นของกลุ่มบริษัท ดูแลลูกค้าในประเทศ' },
+    en: { tagline: 'Group company serving local customers', description: 'AlphaSource Corporation, founded in 2014, is where the group started, serving local customers.' },
+  },
+  {
+    name: 'FET Solution Engineering', slug: 'fet-solution-engineering', kind: 'partner', categories: [],
+    th: { tagline: 'พันธมิตรทางธุรกิจ' }, en: { tagline: 'Business partner' },
+  },
+  {
+    name: 'Alliance Packing Group', slug: 'alliance-packing-group', kind: 'partner', categories: [],
+    th: { tagline: 'พันธมิตรทางธุรกิจ' }, en: { tagline: 'Business partner' },
+  },
 ] as const
-for (const [order, b] of brandData.entries()) {
-  await payload.create({ collection: 'brands', data: { ...b, order } })
+for (const [order, { th, en, categories, ...b }] of brandData.entries()) {
+  const doc = await payload.create({ collection: 'brands', locale: 'th', data: { ...b, categories: [...categories], order, ...th } })
+  await payload.update({ collection: 'brands', id: doc.id, locale: 'en', data: en })
 }
 
 await payload.updateGlobal({
@@ -89,7 +113,7 @@ await payload.updateGlobal({
 const nav = (th: boolean) => [
   { label: th ? 'สินค้า' : 'Products', href: '/products' },
   { label: th ? 'โซลูชัน' : 'Solutions', href: '/#solutions' },
-  { label: th ? 'อุตสาหกรรม' : 'Industries', href: '/#industries' },
+  { label: th ? 'แบรนด์' : 'Brands', href: '/brands' },
   { label: th ? 'เกี่ยวกับเรา' : 'About', href: '/#about' },
   { label: th ? 'ติดต่อ' : 'Contact', href: '/contact' },
 ]
@@ -178,7 +202,7 @@ await payload.updateGlobal({
           { year: '2020', text: 'ตัวแทนจำหน่าย element14' },
         ],
       },
-      { blockType: 'logoWall', heading: 'แบรนด์และพันธมิตร' },
+      { blockType: 'logoWall', style: 'cards', eyebrow: 'Brands', heading: 'เลือกดูตามแบรนด์' },
       { blockType: 'cta', heading: 'มี BOM หรือ Part Number\nที่ต้องการอยู่แล้ว?', body: 'ส่งรายการมา ทีมขายตอบกลับพร้อมราคาภายใน 1 วันทำการ', buttonLabel: 'ขอใบเสนอราคา' },
     ],
   },

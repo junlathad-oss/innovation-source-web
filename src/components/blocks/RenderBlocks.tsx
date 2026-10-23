@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { HomePage } from '@/payload-types'
 import { getClient, isMedia, mediaUrl, type Locale } from '@/lib/payload'
+import { BrandCard } from '../BrandCard'
 import { ArrowRight, CategoryIcon, HeroIllustration, TrustIcon } from '../Icons'
 import { QuickInquiry } from '../InquiryForm'
 import { Reveal } from '../Reveal'
@@ -163,6 +164,24 @@ async function LogoWall({ block, locale }: { block: BlockOf<'logoWall'>; locale:
     const payload = await getClient()
     brands = (await payload.find({ collection: 'brands', locale, sort: 'order', limit: 24, depth: 1 })).docs
   }
+
+  if (block.style !== 'logos') {
+    return (
+      <section className="container section" id="brands">
+        <div className="section-head">
+          <div>
+            {block.eyebrow && <div className="eyebrow">{block.eyebrow}</div>}
+            {block.heading && <h2>{block.heading}</h2>}
+          </div>
+          <Link href="/brands" style={{ fontWeight: 600 }}>{locale === 'th' ? 'ดูแบรนด์ทั้งหมด →' : 'All brands →'}</Link>
+        </div>
+        <Reveal className="brand-grid">
+          {brands.map((b) => typeof b === 'object' && <BrandCard key={b.id} brand={b} locale={locale} />)}
+        </Reveal>
+      </section>
+    )
+  }
+
   return (
     <section className="container section">
       {block.heading && <div className="logos__title">{block.heading}</div>}

@@ -200,3 +200,21 @@ h1, h2, h3 { font-family: var(--font-thai-display); font-weight: 600; letter-spa
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero__copy > * { animation: none; }
 }
+
+/* Brand cards */
+.brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 16px; }
+.brand-card { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-md); background: #fff; color: var(--ink); min-height: 280px; transition: border-color .2s, transform .25s, box-shadow .25s; }
+.brand-card:hover { color: var(--ink); border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 18px 40px -24px rgba(15,107,79,.45); }
+.brand-card--authorized { background: var(--surface-2); border-color: #d5e2db; }
+.brand-card--authorized .brand-card__badge { background: var(--accent); color: #fff; border-color: var(--accent); }
+.brand-card__top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.brand-card__badge { white-space: nowrap; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; border: 1px solid #d5e2db; color: var(--accent); background: #fff; }
+.brand-card__origin { font-size: 13px; color: var(--muted); }
+.brand-card__mark { font-family: var(--font-display); font-weight: 600; font-size: 28px; letter-spacing: -0.02em; line-height: 1.1; min-height: 56px; display: flex; align-items: center; }
+.brand-card__mark img { max-height: 56px; width: auto; }
+.brand-card__tagline { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+.brand-card__desc { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.brand-card__cats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.brand-card__cats li { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--ink-2); }
+.brand-card__cta { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; color: var(--accent); }
+.filters__label { font-size: 13px; color: var(--muted); font-weight: 600; margin: 0 4px 0 0; align-self: center; min-width: 64px; }

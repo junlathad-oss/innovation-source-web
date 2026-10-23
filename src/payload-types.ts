@@ -248,9 +248,17 @@ export interface Media {
 export interface Brand {
   id: number;
   name: string;
+  /**
+   * เว้นว่างไว้เพื่อสร้างอัตโนมัติ
+   */
+  slug?: string | null;
   logo?: (number | null) | Media;
   kind?: ('authorized' | 'partner' | 'group') | null;
   since?: number | null;
+  origin?: string | null;
+  tagline?: string | null;
+  description?: string | null;
+  categories?: (number | Category)[] | null;
   url?: string | null;
   order?: number | null;
   updatedAt: string;
@@ -433,9 +441,14 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface BrandsSelect<T extends boolean = true> {
   name?: T;
+  slug?: T;
   logo?: T;
   kind?: T;
   since?: T;
+  origin?: T;
+  tagline?: T;
+  description?: T;
+  categories?: T;
   url?: T;
   order?: T;
   updatedAt?: T;
@@ -684,6 +697,8 @@ export interface HomePage {
             blockType: 'timeline';
           }
         | {
+            style?: ('cards' | 'logos') | null;
+            eyebrow?: string | null;
             heading?: string | null;
             brands?: (number | Brand)[] | null;
             id?: string | null;
@@ -902,6 +917,8 @@ export interface HomePageSelect<T extends boolean = true> {
         logoWall?:
           | T
           | {
+              style?: T;
+              eyebrow?: T;
               heading?: T;
               brands?: T;
               id?: T;
