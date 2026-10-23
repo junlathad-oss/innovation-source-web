@@ -1,8 +1,8 @@
 /**
  * Seeds the CMS with the company's real content (from the current site).
  * Run once on an empty database: `npm run seed`
- * Images: drop files into ./seed-media (hero.png, hero.mp4, capacitors.png, ics.png,
- * resistors.png, harness.png, ties.png, electromechanical.png) before running.
+ * Images: drop files into ./seed-media (hero.webp, hero.mp4, capacitors.webp, ics.webp,
+ * resistors.webp, harness.webp, ties.webp, electromechanical.webp) before running.
  */
 import fs from 'fs'
 import path from 'path'
@@ -42,7 +42,7 @@ const categoryData = [
 ]
 
 for (const [order, c] of categoryData.entries()) {
-  const image = await upload(`${c.slug}.png`, c.title)
+  const image = await upload(`${c.slug}.webp`, c.title)
   const doc = await payload.create({ collection: 'categories', locale: 'th', data: { title: c.title, slug: c.slug, subtitle: c.th, order, image } })
   await payload.update({ collection: 'categories', id: doc.id, locale: 'en', data: { subtitle: c.en } })
 }
@@ -112,7 +112,7 @@ await payload.updateGlobal({
   },
 })
 
-const heroImage = await upload('hero.png', 'ชิ้นส่วนอิเล็กทรอนิกส์บนแท่นจัดแสดง')
+const heroImage = await upload('hero.webp', 'ชิ้นส่วนอิเล็กทรอนิกส์บนแท่นจัดแสดง')
 const heroVideo = await upload('hero.mp4', '')
 
 await payload.updateGlobal({

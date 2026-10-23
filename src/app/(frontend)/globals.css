@@ -79,6 +79,18 @@ h1, h2, h3 { font-family: var(--font-thai-display); font-weight: 600; letter-spa
 .hero__media { flex: 1 1 460px; position: relative; min-height: 420px; background: var(--surface-3); display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .hero__media img, .hero__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
+/* Hero with photo/video: media fills the card, copy sits on its empty left side */
+.hero__card--media { position: relative; min-height: 640px; background: #e6efea; }
+.hero__card--media .hero__copy { position: relative; z-index: 1; flex: 0 1 600px; }
+.hero__card--media .hero__media { position: absolute; inset: 0; min-height: 0; background: transparent; }
+.hero__card--media .hero__media img, .hero__card--media .hero__media video { object-position: 70% center; }
+@media (max-width: 960px) {
+  .hero__card--media { flex-direction: column; min-height: 0; }
+  .hero__card--media .hero__copy { flex: none; }
+  .hero__card--media .hero__media { position: relative; aspect-ratio: 16 / 10; }
+  .hero__card--media .hero__media img, .hero__card--media .hero__media video { object-position: 75% center; }
+}
+
 /* Stats */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding-top: 48px; }
 .stats > div { padding: 24px 0; border-top: 1px solid var(--line); }

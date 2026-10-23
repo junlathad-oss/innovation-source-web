@@ -13,7 +13,7 @@ function Hero({ block }: { block: BlockOf<'hero'> }) {
   const video = mediaUrl(block.video)
   return (
     <section className="container hero" id="top">
-      <div className="hero__card">
+      <div className={`hero__card${image || video ? ' hero__card--media' : ''}`}>
         <div className="hero__copy">
           {block.badge && <span className="badge">{block.badge}</span>}
           <h1>
