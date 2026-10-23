@@ -16,7 +16,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const site = await payload.findGlobal({ slug: 'site-settings', locale, depth: 1 })
   const image = mediaUrl(site.seo?.image, 'hero')
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SERVER_URL ||
+        (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
+    ),
     title: { default: site.seo?.title || 'Innovation Source Thailand', template: '%s · Innovation Source' },
     description: site.seo?.description || undefined,
     openGraph: image ? { images: [image] } : undefined,
