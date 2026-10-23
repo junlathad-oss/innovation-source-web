@@ -25,10 +25,11 @@ if (existing.totalDocs > 0) {
   process.exit(0)
 }
 
-if ((await payload.count({ collection: 'users' })).totalDocs === 0) {
+// Only create an admin when credentials are supplied; otherwise /admin asks for the first user
+if (process.env.SEED_ADMIN_EMAIL && process.env.SEED_ADMIN_PASSWORD && (await payload.count({ collection: 'users' })).totalDocs === 0) {
   await payload.create({
     collection: 'users',
-    data: { email: process.env.SEED_ADMIN_EMAIL || 'admin@innovation-sources.com', password: process.env.SEED_ADMIN_PASSWORD || 'change-me-now', name: 'Admin' },
+    data: { email: process.env.SEED_ADMIN_EMAIL, password: process.env.SEED_ADMIN_PASSWORD, name: 'Admin' },
   })
 }
 
