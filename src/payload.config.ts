@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import sharp from 'sharp'
 import { en } from '@payloadcms/translations/languages/en'
 import { th } from '@payloadcms/translations/languages/th'
@@ -40,7 +41,16 @@ export default buildConfig({
   editor: lexicalEditor(),
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI || '' },
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
+  plugins: [
+    // Serverless hosts have no persistent disk, so uploads go to Vercel Blob when a token is set
+    vercelBlobStorage({
+      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      collections: { media: true },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
+  ],
   sharp,
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
 })

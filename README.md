@@ -34,8 +34,25 @@ Without them the site falls back to line-art icons.
 ## Routes
 `/` home · `/products` (filter `?category=`, search `?q=`) · `/products/[slug]` · `/contact`
 
-## Deploying
-Any Node host works (Vercel, Railway, a VPS). Use a managed Postgres (Neon, Supabase).
-Uploaded media is stored on local disk by default; on serverless hosts add a storage
-adapter such as `@payloadcms/storage-s3` or `@payloadcms/storage-vercel-blob`.
-For production, generate migrations with `npx payload migrate:create` and run `npx payload migrate`.
+## Deploying (Vercel + Neon)
+1. **Database:** create a Neon project and copy its pooled connection string.
+2. **Vercel:** import this GitHub repo as a new project. `vercel.json` already sets the build
+   command to `npm run ci`, which runs database migrations and then `next build`.
+3. **Storage:** in the Vercel project, open Storage → create a Blob store and connect it.
+   That adds `BLOB_READ_WRITE_TOKEN`, so uploads are stored in Vercel Blob.
+4. **Environment variables** (Production and Preview):
+   - `DATABASE_URI`: the Neon connection string
+   - `PAYLOAD_SECRET`: a long random string (`openssl rand -hex 32`)
+   - `NEXT_PUBLIC_SERVER_URL`: the site URL, e.g. `https://www.innovation-sources.com`
+5. Deploy. Then load the starter content once from your machine, pointing at the same
+   database and Blob store:
+   ```bash
+   DATABASE_URI=... PAYLOAD_SECRET=... BLOB_READ_WRITE_TOKEN=... \
+   SEED_ADMIN_EMAIL=you@company.com SEED_ADMIN_PASSWORD=... npm run seed
+   ```
+6. Sign in at `/admin` and change the admin password.
+
+### Schema changes
+Changing a collection or global changes the database schema. Locally, Payload syncs the schema
+automatically in dev. Before deploying, run `npm run migrate:create <name>` and commit the
+generated file in `src/migrations`; the Vercel build applies it.
